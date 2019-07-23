@@ -87,11 +87,41 @@ for iterator in my_page_count:
 
 	index = index + 1
 
+print("This task completed in " + str( time.time() - start_time ) + " seconds" )
+
+vendor_list = []
+
+class Vendor:
+	def __init__(self ,name, prod):
+		self.name = name
+		self.vendor_product_list = []
+		self.addProduct(prod)
+	def addProduct(self, prod):
+		self.vendor_product_list.append(prod)
+
+for x in product_list:
+
+	index = 0
+	vendorCount = 0
+	for y in vendor_list:
+		if x.vendor == y.name:
+			index = vendorCount
+			break
+		vendorCount = vendorCount + 1
+	
+	if(index == 0):
+		v = Vendor(x.vendor, x)
+		vendor_list.append(v)
+	else:
+		vendor_list[index].vendor_product_list.append(x)
+
+# the reference I used to serialize the obj_list to json
+# https://stackoverflow.com/questions/26033239/list-of-objects-to-json-with-python
 def obj_dict(obj):
     return obj.__dict__
 
 # converst the object list to json
-json_string = json.dumps(product_list, default=obj_dict)
+json_string = json.dumps(vendor_list, default=obj_dict)
 
 # writes the json string to a file stored locally
 text_file = open("420Beast.json", "w")
@@ -101,3 +131,5 @@ text_file.close()
 # final report to user when script is ran
 print("Pulled " + str(len(product_list)) + " products from 420 beast, and saved them to 420Beast.json!")
 print("This task completed in " + str( time.time() - start_time ) + " seconds" )
+
+print(len(vendor_list))
