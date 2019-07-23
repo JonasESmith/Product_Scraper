@@ -17,12 +17,11 @@ my_page_count = [
 	4,
 ]
 
-my_urls = [ ]
-
 # simple count variable to show number of products
 index = 0
 count = 1
 
+# very simple product class
 class Product:
 	def __init__(self ,name, vendor, price, description):
 		self.name = name
@@ -32,14 +31,17 @@ class Product:
 
 product_list = []
 
+# simple time reporting tool
 start_time = time.time()
 for iterator in my_page_count:
 
+	# re-init blank my_urls list in order to iterate through and "grab" products
 	my_urls = []
 
 	for x in range(iterator):
+		# this potentially could be user input
 		value = 'https://420beast.com/collections/{}?page={}&view=view-48&grid_list=list-view'.format(my_strings[index], str(x))
-
+		# simply adds the url formatted into the my_urls list
 		my_urls.append(value)
 
 	for link in my_urls:
@@ -64,9 +66,9 @@ for iterator in my_page_count:
 
 		#gets all product items that are in a list element
 		products = page_soup.findAll("div", {"class":"productitem"})
-		len(products)
 
 		for prod in products:
+			# tries to create a new simple product object and adds to list of products
 			try:
 				prod_Name = prod.find("h2",{"class":"productitem--title"}).text.strip()
 				prod_Vndr = prod.find("h3",{"class":"productitem--vendor"}).text.strip()
@@ -84,7 +86,6 @@ for iterator in my_page_count:
 				count = count + 1
 
 	index = index + 1
-
 
 def obj_dict(obj):
     return obj.__dict__
