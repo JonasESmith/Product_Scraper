@@ -1,6 +1,7 @@
 from urllib.request import urlopen as uReq
 from bs4 import BeautifulSoup as soup
 import json
+import time
 
 my_strings = [
 	'under-25',
@@ -31,7 +32,7 @@ class Product:
 
 product_list = []
 
-
+start_time = time.time()
 for iterator in my_page_count:
 
 	my_urls = []
@@ -73,7 +74,7 @@ for iterator in my_page_count:
 				prod_dsct = prod.find("div",{"class":"productitem--description"}).text.strip()
 
 				tmpProd = Product(prod_Name, prod_Vndr, prod_pric, prod_dsct)
-				
+
 				count = count + 1
 
 				product_list.append(tmpProd)
@@ -84,14 +85,18 @@ for iterator in my_page_count:
 
 	index = index + 1
 
-for x in product_list:
-	print(x)
-
-print(len(product_list))
 
 def obj_dict(obj):
     return obj.__dict__
 
+# converst the object list to json
 json_string = json.dumps(product_list, default=obj_dict)
 
-print(json_string)
+# writes the json string to a file stored locally
+text_file = open("420Beast.json", "w")
+text_file.write(json_string)
+text_file.close()
+
+# final report to user when script is ran
+print("Pulled " + str(len(product_list)) + " products from 420 beast, and saved them to 420Beast.json!")
+print("This task completed in " + str( time.time() - start_time ) + " seconds" )
