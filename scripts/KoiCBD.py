@@ -62,13 +62,42 @@ print(len(actual_list))
 for x in actual_list:
     print(x.link)
 
-for prod in product_list:
-    req = Request(prod.link, headers={'User-Agent': 'Mozilla/5.0'})
-    webpage = urlopen(req).read()
-    page_soup = soup(webpage, "html.parser")
-    scripts = page_soup.findAll('script', {"type":"text/javascript"})
+req = Request(actual_list[0].link, headers={'User-Agent': 'Mozilla/5.0'})
+webpage = urlopen(req).read()
+page_soup = soup(webpage, "html.parser")
+scripts = page_soup.findAll('script', {"src": False})
 
-    pattern = re.compile(r"window.Rent.data\s+=\s+(\{.*?\});\n")
+print( str( actual_list[0].link ) )
+print( len( scripts ) )
 
-    for script in scripts:
-        print(script)
+mystring="""
+    qwertyuiop
+    asdfghjkl
+
+    zxcvbnm
+    token qwerty
+
+    asdfghjklñ 
+    """
+
+for item in mystring.split("\n"):
+    if "token" in item:
+        print(item.strip())
+
+# for script in scripts:
+#     for line in script.split("\n"):
+#         if ("tvc_po=" in line):
+#             print(script)
+#         print(line)
+
+print("end")
+
+# for prod in actual_list:
+#     req = Request(prod.link, headers={'User-Agent': 'Mozilla/5.0'})
+#     webpage = urlopen(req).read()
+#     page_soup = soup(webpage, "html.parser")
+#     scripts = page_soup.findAll('script', {"type":"text/javascript"})
+
+#     for script in scripts:
+#         if ("tvc_po=" in script):
+#             print(script)
