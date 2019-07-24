@@ -23,7 +23,7 @@ page_soup.div
 repos = page_soup.findAll("li",{"class":"col-12"})
 
 len(repos)
-count = 1;
+count = 1
 
 for repo in repos:
 	try:

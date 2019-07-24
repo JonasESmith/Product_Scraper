@@ -121,7 +121,7 @@ def obj_dict(obj):
     return obj.__dict__
 
 # converst the object list to json
-json_string = json.dumps(vendor_list, default=obj_dict)
+json_string = json.dumps(product_list, default=obj_dict)
 
 # writes the json string to a file stored locally
 text_file = open("420Beast.json", "w")
