@@ -10,8 +10,7 @@ class Store:
 
 store_list = []
 
-
-req = Request("https://www.bullseyelocations.com/pages/koi?f=2", headers={'User-Agent': 'Mozilla/5.0'})
+req = Request("https://www.bullseyelocations.com/pages/koi?f=2&radius=200", headers={'User-Agent': 'Mozilla/5.0'})
 webpage = urlopen(req).read()
 page_soup = soup(webpage, "html.parser")
 stores = page_soup.findAll("div", {"class":"resultsDetails"})

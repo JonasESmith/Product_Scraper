@@ -67,28 +67,18 @@ webpage = urlopen(req).read()
 page_soup = soup(webpage, "html.parser")
 scripts = page_soup.findAll('script', {"src": False})
 
-print( str( actual_list[0].link ) )
-print( len( scripts ) )
+newLine = ""
 
-mystring="""
-    qwertyuiop
-    asdfghjkl
+for script in scripts:
+    for line in script:
+        if(line is not None):
+            if ("tvc_po=" in line):
+                newLine = line
 
-    zxcvbnm
-    token qwerty
-
-    asdfghjklñ 
-    """
-
-for item in mystring.split("\n"):
-    if "token" in item:
-        print(item.strip())
-
-# for script in scripts:
-#     for line in script.split("\n"):
-#         if ("tvc_po=" in line):
-#             print(script)
-#         print(line)
+newLine = newLine.split("\n")
+for line in newLine:
+    if("tvc_po=" in line):
+        print(line)
 
 print("end")
 
