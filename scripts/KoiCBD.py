@@ -10,8 +10,8 @@ class Product:
 		self.alt = alt
 		self.price = price
 		self.link = link
-	def addJson(self, json):
-		self.json = json
+	def addJson(self, jsonVal):
+		self.jsonVal = jsonVal
 
 product_list = []
 
@@ -77,24 +77,28 @@ for prod in actual_list:
     newLine = newLine.split("\n")
     for line in newLine:
         if("tvc_po=" in line):
-            newline = line.replace("tvc_po=", "")
+            newline = line.replace("tvc_po=","").replace(";","")
             break
+
+    # json_values = json.dumps(newline)
+    # # json_dump_values = json.dumps(json_values, indent=4, sort_keys=True)
 
     prod.addJson(newline)
 
 for x in actual_list:
     print(x.name)
-    print(x.json)
+    print(x.jsonVal)
     print()
 
+def obj_dict(obj):
+    return obj.__dict__
+
+# converst the object list to json
+json_string = json.dumps(actual_list, default=obj_dict)
+
+text_file = open("KoiCBD.json", "w")
+text_file.write(json_string)
+text_file.close()
+
+print()
 print("end")
-
-# for prod in actual_list:
-#     req = Request(prod.link, headers={'User-Agent': 'Mozilla/5.0'})
-#     webpage = urlopen(req).read()
-#     page_soup = soup(webpage, "html.parser")
-#     scripts = page_soup.findAll('script', {"type":"text/javascript"})
-
-#     for script in scripts:
-#         if ("tvc_po=" in script):
-#             print(script)
