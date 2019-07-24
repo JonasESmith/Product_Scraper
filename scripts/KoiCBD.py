@@ -2,6 +2,7 @@ from urllib.request import Request, urlopen
 from bs4 import BeautifulSoup as soup
 import json
 import re
+import pickle
 
 class Product:
 	def __init__(self ,name, alt, price, link):
@@ -9,6 +10,8 @@ class Product:
 		self.alt = alt
 		self.price = price
 		self.link = link
+	def addJson(self, json):
+		self.json = json
 
 product_list = []
 
@@ -57,28 +60,32 @@ for x in product_list:
     if(count == 0):
         actual_list.append(x)
 
+for prod in actual_list:
+    req = Request(prod.link, headers={'User-Agent': 'Mozilla/5.0'})
+    webpage = urlopen(req).read()
+    page_soup = soup(webpage, "html.parser")
+    scripts = page_soup.findAll('script', {"src": False})
 
-print(len(actual_list))
+    newLine = ""
+
+    for script in scripts:
+        for line in script:
+            if(line is not None):
+                if ("tvc_po=" in line):
+                    newLine = line
+
+    newLine = newLine.split("\n")
+    for line in newLine:
+        if("tvc_po=" in line):
+            newline = line.replace("tvc_po=", "")
+            break
+
+    prod.addJson(newline)
+
 for x in actual_list:
-    print(x.link)
-
-req = Request(actual_list[0].link, headers={'User-Agent': 'Mozilla/5.0'})
-webpage = urlopen(req).read()
-page_soup = soup(webpage, "html.parser")
-scripts = page_soup.findAll('script', {"src": False})
-
-newLine = ""
-
-for script in scripts:
-    for line in script:
-        if(line is not None):
-            if ("tvc_po=" in line):
-                newLine = line
-
-newLine = newLine.split("\n")
-for line in newLine:
-    if("tvc_po=" in line):
-        print(line)
+    print(x.name)
+    print(x.json)
+    print()
 
 print("end")
 
