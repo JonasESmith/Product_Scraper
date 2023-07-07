@@ -5,37 +5,32 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 
-class GoogleTestCase(unittest.TestCase):
+class TopShelfHempTestCase(unittest.TestCase):
     def setUp(self):
         self.browser = webdriver.Firefox()
         self.addCleanup(self.browser.quit)
 
-    def test_page_title(self):
-        self.browser.get("http://www.google.com")
-        self.assertIn("Google", self.browser.title)
+    def test_page_loading(self):
+        self.browser.get(
+            "https://www.topshelfhemp.co/map?fbclid=IwAR3D6NX3b4E_uhZ3hRvq526yRXvfJprI3cMyMPFl-1r758oDcddjw52a9HE_aem_AV03lU6wZWa1nJPb1WqcJN9Unq-Si5IOoKEKs7pFKIzXdhapQ39S9b7m4b3vQKjIQCk"
+        )
 
-        # Find the search box using its name attribute value
-        search_box = self.browser.find_element(By.NAME, "q")
+        # Wait for the map's canvas element to load
+        WebDriverWait(self.browser, 10).until(
+            EC.presence_of_element_located((By.CLASS_NAME, "maplibregl-canvas"))
+        )
 
-        # Clear the search box in case there's any pre-filled text
-        search_box.clear()
+        # Retrieve all elements for stores
+        store_elements = self.browser.find_elements(By.CLASS_NAME, "maplibregl-marker")
 
-        # Type the search query into the search box
-        search_box.send_keys("eqalink.com")
+        print(f"Found {len(store_elements)} store elements")
 
-        # Submit the search form
-        search_box.submit()
+        page_html = self.browser.page_source
+        print("Obtained page HTML, attempting to write to file...")
 
-        # Wait for the search results page to load
-        wait = WebDriverWait(self.browser, 10)
-        wait.until(EC.title_contains("eqalink.com - Google Search"))
-
-        # Assert that the search results page has loaded by checking the page title
-        self.assertIn("eqalink.com - Google Search", self.browser.title)
-
-        # Save the page HTML to a file
         with open("selenium_test_output.html", "w", encoding="utf-8") as file:
-            file.write(self.browser.page_source)
+            file.write(page_html)
+            print("Page HTML written to selenium_test_output.html successfully.")
 
 
 if __name__ == "__main__":
